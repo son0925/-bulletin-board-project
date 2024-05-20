@@ -11,6 +11,7 @@ async function writePost(req,res) {
 
     // 요청한 title, content 받기
     const {title, content} = req.body;
+    const {username} = req.user;
 
     // index를 넣기 위해 postCount
     const postsLength = await Post.countDocuments({}) || 0;
@@ -18,7 +19,7 @@ async function writePost(req,res) {
     // Post 객체 생성
     const post = new Post({
       index: postsLength + 1,
-      username: '알 수 없음',
+      username: username,
       title: title,
       content: content
     })
@@ -32,7 +33,7 @@ async function writePost(req,res) {
 
     // 성공적으로 저장되었음을 클라이언트에 전달
     const msg = '게시글이 작성되었습니다';
-    res.status(200).render('index', {msg})
+    res.redirect('/')
   }
   catch (error) {
     console.log(error);
