@@ -1,0 +1,43 @@
+<header>
+    <div class="auth-buttons">
+      <button onclick="location.href='/login'">로그인</button>
+      <button onclick="location.href='/signup'">회원가입</button>
+    </div>
+  </header>
+  <main>
+    <h1>자유 게시판</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>번호</th>
+          <th>작성자</th>
+          <th>제목</th>
+          <th>올린 날짜</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 게시글 목록이 여기에 삽입될 것입니다 -->
+        {{#if isCheck}}
+          {{#each posts}}
+            <tr>
+              <td>{{this.index}}</td>
+              <td>{{this.username}}</td>
+              <td><a href="/posts/{{this.index}}">{{this.title}}</a></td>
+              <td>{{this.date}}</td>
+            </tr>
+          {{/each}}
+        {{else}} 
+          <tr>
+            <td>-1</td>
+            <td>관리자</td>
+            <td>아무 게시글이 없습니다</td>
+            <td></td>
+          </tr>
+        {{/if}}
+        <!-- 예시 게시글 추가 -->
+      </tbody>
+    </table>
+    <div class="write-post">
+      <button onclick="location.href='/posts/write'">글쓰기</button>
+    </div>
+  </main>
