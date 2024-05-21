@@ -1,10 +1,11 @@
-<h2>{{post.title}}</h2>
-<p>{{post.username}}님이 쓴 글</p>
-<p>{{post.content}}</p>
-<a href="/">돌아가기</a>
-<a href="javascript:void(0)" onclick="deletePost('{{post.index}}')">삭제하기</a>
-
-
+<div id="post-container">
+  <h2 id="post-title">{{post.title}}</h2>
+  <p id="post-username">{{post.username}}님이 쓴 글</p>
+  <p id="post-content">{{post.content}}</p>
+  <a href="/">돌아가기</a>
+  <a href="javascript:void(0)" onclick="deletePost('{{post.index}}')">삭제하기</a>
+  <a href="javascript:void(0)" onclick="updateViewPost('{{post.index}}')">수정하기</a>
+</div>
 
 <script>
   async function deletePost(index) {
@@ -27,5 +28,11 @@
         alert('삭제 중 오류 발생')
       }
     }
+  }
+
+  async function updateViewPost(index) {
+    const res = await fetch(`/posts/${index}`, {
+      method: 'GET'
+    })
   }
 </script>

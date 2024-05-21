@@ -38,7 +38,7 @@ async function writePost(req,res) {
   catch (error) {
     console.log(error);
     const msg = '게시글 작성에 실패했습니다'
-    res.status(500).render('index', {msg})
+    res.status(500).render('index', {msg}).redirect('/')
   }
 }
 
@@ -68,10 +68,25 @@ async function deletePost(req,res) {
   }
 }
 
+async function updatePost(req,res) {
+  const index = req.params.index;
+  if (!index) {
+    res.status(100).redirect('/');
+  }
+  try {
+    await Post.findOneAndUpdate({index: index});
+    res.status(200).render('index');
+  }
+  catch (err) {
+    res.status(500).render('index');
+  }
+}
+
 
 module.exports = {
   getWritePost,
   writePost,
   viewContent,
-  deletePost
+  deletePost,
+  updatePost
 }
