@@ -38,7 +38,7 @@ async function writePost(req,res) {
   catch (error) {
     console.log(error);
     const msg = '게시글 작성에 실패했습니다'
-    res.status(500).render('index', {msg}).redirect('/')
+    res.status(500).render('index', {msg})
   }
 }
 
@@ -53,20 +53,29 @@ async function viewContent(req,res) {
   res.render('viewContent', {post});
 }
 
-async function deletePost(req,res) {
+async function deletePost(req, res) {
   const index = req.params.index;
-  if (!index) {
-    res.status(100).render('index');
-  } 
-  try {
-    await Post.deleteOne({index: index})
-
-    res.status(200).render('index');
+  const postUserInfo = await Post.findOne({ index: index });
+  
+  if (!postUserInfo) {
+    return res.status(404).json({ msg: '게시글을 찾을 수 없습니다' });
   }
-  catch (err) {
-    res.status(500).render('index')
+
+  const deleteUserName = req.user.username;
+  if (postUserInfo.username !== deleteUserName) {
+    console.log('다른 유저 삭제 시도');
+    return res.status(403).json({ msg: '게시글을 작성한 유저가 아닙니다' });
+  }
+
+  try {
+    await Post.deleteOne({ index: index });
+    return res.status(200).json({ msg: '게시글이 삭제되었습니다' });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ msg: '서버 오류로 인해 게시글 삭제를 실패했습니다' });
   }
 }
+
 
 async function updatePost(req,res) {
   const index = req.params.index;
